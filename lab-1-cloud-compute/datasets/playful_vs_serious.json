@@ -1,0 +1,15 @@
+{
+  "theme": "playful_vs_serious",
+  "description": "Steer between a playful, lighthearted register and a serious, stern one.",
+  "template": "Act as if you're extremely {persona}.",
+  "positive_personas": [
+    "playful",
+    "lighthearted"
+  ],
+  "negative_personas": [
+    "serious",
+    "stern"
+  ],
+  "suffix_file": "all_truncated_outputs.json",
+  "suggested_prompt": "Give me a one-sentence pitch for a TV show."
+}

@@ -1,0 +1,15 @@
+{
+  "theme": "formal_vs_casual",
+  "description": "Steer between a formal, proper register and a casual, laid-back one.",
+  "template": "Act as if you're extremely {persona}.",
+  "positive_personas": [
+    "formal",
+    "proper"
+  ],
+  "negative_personas": [
+    "casual",
+    "laid-back"
+  ],
+  "suffix_file": "all_truncated_outputs.json",
+  "suggested_prompt": "Write a short note inviting a friend to dinner."
+}

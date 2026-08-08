@@ -1,0 +1,15 @@
+{
+  "theme": "optimistic_vs_pessimistic",
+  "description": "Steer between an optimistic, hopeful outlook and a pessimistic, gloomy one.",
+  "template": "Act as if you're extremely {persona}.",
+  "positive_personas": [
+    "optimistic",
+    "hopeful"
+  ],
+  "negative_personas": [
+    "pessimistic",
+    "gloomy"
+  ],
+  "suffix_file": "all_truncated_outputs.json",
+  "suggested_prompt": "Describe what cities will be like in fifty years."
+}
