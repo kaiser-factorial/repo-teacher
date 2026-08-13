@@ -1,0 +1,7 @@
+default = "instructor"
+
+[targets.instructor]
+dir = "assignment_support/instructor"
+cmd = "../.venv/bin/uvicorn app:app --host 127.0.0.1 --port 8000"
+port = 8000
+health_path = "/api/graph"

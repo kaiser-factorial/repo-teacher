@@ -1,0 +1,50 @@
+:root {
+  color-scheme: light;
+  --navy: #0b2942;
+  --blue: #065a82;
+  --teal: #1c7293;
+  --ice: #cfe8f0;
+  --ink: #1b2733;
+  --muted: #5c7080;
+  --card: #f2f8fa;
+  --line: #a9c7d4;
+  font-family: Calibri, system-ui, sans-serif;
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; color: var(--ink); background: #fff; }
+.hero { padding: 4rem max(6vw, 1.5rem) 3.5rem; color: white; background: var(--navy); }
+.eyebrow, .section-label { margin: 0 0 .6rem; font: 700 .78rem/1.2 "Courier New", monospace; letter-spacing: .12em; }
+.hero .eyebrow { color: var(--ice); }
+h1 { margin: 0; font: 700 clamp(3.5rem, 9vw, 7rem)/.9 Cambria, serif; }
+.hero > p:last-child { max-width: 46rem; margin: 1.4rem 0 0; color: var(--ice); font-size: 1.25rem; }
+main { width: min(1180px, calc(100% - 2rem)); margin: 2rem auto 5rem; display: grid; gap: 1.5rem; }
+section { border: 1px solid var(--ice); border-radius: 1.1rem; padding: clamp(1.2rem, 3vw, 2rem); background: var(--card); }
+.section-label { color: var(--blue); }
+h2 { margin: 0; font: 700 2rem/1 Cambria, serif; color: var(--navy); }
+form { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; margin-top: 1.5rem; align-items: end; }
+label { display: grid; gap: .4rem; font-weight: 700; color: var(--navy); }
+input, select { width: 100%; min-height: 2.8rem; border: 1px solid var(--line); border-radius: .55rem; padding: .65rem .75rem; background: white; color: var(--ink); font: inherit; }
+input:focus, select:focus, button:focus { outline: 3px solid rgba(28,114,147,.25); outline-offset: 2px; }
+.wide { grid-column: span 2; }
+button { min-height: 2.8rem; border: 0; border-radius: .55rem; padding: .7rem 1rem; color: white; background: var(--blue); font: 700 1rem/1 Calibri, sans-serif; cursor: pointer; }
+button:hover { background: var(--teal); }
+.secondary { color: var(--blue); background: white; border: 1px solid var(--line); }
+.panel-heading { display: flex; justify-content: space-between; gap: 1rem; align-items: end; }
+#form-status { grid-column: 1 / -1; min-height: 1.4rem; color: var(--muted); }
+#graph { width: 100%; height: auto; min-height: 360px; margin-top: 1rem; border-radius: .8rem; background: white; }
+.empty { margin: -2rem 0 1rem; text-align: center; color: var(--muted); }
+.edge { stroke: var(--line); stroke-width: 2; }
+.edge-label { fill: var(--blue); font: 700 13px "Courier New", monospace; text-anchor: middle; }
+.node circle { fill: var(--navy); stroke: var(--ice); stroke-width: 5; }
+.node text { fill: white; font: 700 15px Calibri, sans-serif; text-anchor: middle; pointer-events: none; }
+.node .type { fill: var(--ice); font: 11px "Courier New", monospace; }
+.lookup form { grid-template-columns: minmax(220px, 1fr) auto; }
+pre { overflow: auto; padding: 1rem; min-height: 5rem; border-radius: .7rem; color: var(--ice); background: var(--navy); font: .9rem/1.45 "Courier New", monospace; }
+
+@media (max-width: 760px) {
+  form { grid-template-columns: 1fr; }
+  .wide, #form-status { grid-column: auto; }
+  .panel-heading { align-items: start; flex-direction: column; }
+  .lookup form { grid-template-columns: 1fr; }
+}

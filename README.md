@@ -8,7 +8,7 @@ Every lesson ships as three coordinated artifacts:
 
 | Artifact | File | Purpose |
 |---|---|---|
-| Lecture deck | `*.pptx` | 15–20 slides: standalone background, explicit bridge, then the repo itself |
+| Lecture deck | `*.pptx` | 15–30 slides: standalone background, explicit bridge, then the repo itself |
 | Comprehension quiz | `quiz.py` | Self-scoring pre/post check, run from the terminal |
 | Hands-on assignment | `*_assignment.md` | Exercises validated against the live tool |
 
@@ -24,6 +24,7 @@ Every lesson ships as three coordinated artifacts:
 | 4 | Post-training: a map of the territory | [`huggingface/trl`](https://github.com/huggingface/trl) | Built |
 | 5 | Reinforcement learning, deep dive | [`huggingface/trl`](https://github.com/huggingface/trl) (`grpo_trainer.py`) | Planned |
 | 6 | Distributed RL *(candidate)* | `verifiers` / `prime-rl` | Candidate |
+| 7 | Agent memory: SDKs, MCP, and graph-native persistence | [`neo4j-labs/agent-memory`](https://github.com/neo4j-labs/agent-memory) | Built |
 
 Lecture 1 is the only lesson that teaches general background — transformer architecture,
 the three training stages, and the interpretability mindset. Every later lesson assumes it
@@ -56,6 +57,14 @@ Lesson directories are named `lecture-<n>-<tool>`. That prefix is load-bearing: 
 │   ├── trl_lecture4_kaggle.ipynb   # the GPU half, runs on Kaggle
 │   ├── make_notebook.py            # regenerates the .ipynb
 │   └── gen-icons.js                # regenerates icons/
+├── lecture-7-agent-memory/
+│   ├── Agent_Memory_Lecture.pptx
+│   ├── build_deck.mjs              # artifact-tool deck source
+│   ├── quiz.py
+│   ├── agent_memory_questions.py
+│   ├── quiz_checks.py
+│   ├── agent_memory_assignment.md
+│   └── assignment_support/         # starter, instructor reference, UI, and checks
 ├── icons/                          # shared PNG icon set (see note below)
 ├── vendor/                         # cloned reference repos — gitignored
 └── README.md
@@ -88,9 +97,11 @@ the script tracks both and reports the delta.
 
 ## Rebuilding a deck
 
-Decks are generated programmatically with [`pptxgenjs`](https://gitbrent.github.io/PptxGenJS/),
-against a shared "Ocean Gradient" design system (navy `0B2942`, deep blue `065A82`,
-teal `1C7293`; Cambria titles, Calibri body, Courier New for code citations).
+Decks are generated programmatically against a shared "Ocean Gradient" design system
+(navy `0B2942`, deep blue `065A82`, teal `1C7293`; Cambria titles, Calibri body,
+Courier New for code citations). Earlier lessons use
+[`pptxgenjs`](https://gitbrent.github.io/PptxGenJS/); Lecture 7 uses the bundled
+`@oai/artifact-tool` presentation runtime.
 
 ```bash
 node build.js

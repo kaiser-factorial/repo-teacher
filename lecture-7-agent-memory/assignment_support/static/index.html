@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Memory Map</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <header class="hero">
+      <p class="eyebrow">NEO4J AGENT MEMORY · ASSIGNMENT</p>
+      <h1>Memory Map</h1>
+      <p>Store a connection once. Reopen the app and retrieve the same graph.</p>
+    </header>
+
+    <main>
+      <section class="composer" aria-labelledby="store-title">
+        <div>
+          <p class="section-label">WRITE</p>
+          <h2 id="store-title">Add one relationship</h2>
+        </div>
+        <form id="memory-form">
+          <label>
+            Source
+            <input name="source_name" value="Ada Lovelace" required maxlength="100" />
+          </label>
+          <label>
+            Source type
+            <select name="source_type">
+              <option>PERSON</option><option>OBJECT</option><option>LOCATION</option>
+              <option>EVENT</option><option>ORGANIZATION</option>
+            </select>
+          </label>
+          <label>
+            Relationship
+            <input name="relationship_type" value="wrote about" required maxlength="60" />
+          </label>
+          <label>
+            Target
+            <input name="target_name" value="Analytical Engine" required maxlength="100" />
+          </label>
+          <label>
+            Target type
+            <select name="target_type">
+              <option>OBJECT</option><option>PERSON</option><option>LOCATION</option>
+              <option>EVENT</option><option>ORGANIZATION</option>
+            </select>
+          </label>
+          <label class="wide">
+            Note
+            <input name="note" value="Notes on Bernoulli numbers" maxlength="500" />
+          </label>
+          <button type="submit">Store connection</button>
+          <output id="form-status" aria-live="polite"></output>
+        </form>
+      </section>
+
+      <section class="graph-panel" aria-labelledby="graph-title">
+        <div class="panel-heading">
+          <div>
+            <p class="section-label">RECALL</p>
+            <h2 id="graph-title">Persistent graph</h2>
+          </div>
+          <button id="refresh" class="secondary" type="button">Refresh graph</button>
+        </div>
+        <svg id="graph" viewBox="0 0 1000 520" role="img" aria-label="Stored memory graph"></svg>
+        <p id="graph-empty" class="empty">No graph data yet.</p>
+      </section>
+
+      <section class="lookup" aria-labelledby="lookup-title">
+        <div>
+          <p class="section-label">TRAVERSE</p>
+          <h2 id="lookup-title">Inspect one-hop neighbors</h2>
+        </div>
+        <form id="lookup-form">
+          <label>
+            Entity name
+            <input name="name" value="Ada Lovelace" required />
+          </label>
+          <button type="submit">Find neighbors</button>
+        </form>
+        <pre id="lookup-result">[]</pre>
+      </section>
+    </main>
+
+    <script src="/static/app.js" defer></script>
+  </body>
+</html>
