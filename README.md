@@ -16,15 +16,25 @@ Every lesson ships as three coordinated artifacts:
 
 ## Roadmap
 
+### Lectures
+
 | # | Topic | Repo | Status |
 |---|---|---|---|
 | 1 | Foundations | — | Built |
 | 2 | LogitLoom | [`vgel/logitloom`](https://github.com/vgel/logitloom) | Built |
-| 3 | repeng | [`vgel/repeng`](https://github.com/vgel/repeng) | Planned |
-| 4 | Post-training: a map of the territory | [`huggingface/trl`](https://github.com/huggingface/trl) | Built |
+| 3 | repeng | [`vgel/repeng`](https://github.com/vgel/repeng) | Built |
+| 4 | Post-training: six methods, one training loop | [`huggingface/trl`](https://github.com/huggingface/trl) | Built |
 | 5 | Reinforcement learning, deep dive | [`huggingface/trl`](https://github.com/huggingface/trl) (`grpo_trainer.py`) | Planned |
 | 6 | Distributed RL *(candidate)* | `verifiers` / `prime-rl` | Candidate |
 | 7 | Agent memory: SDKs, MCP, and graph-native persistence | [`neo4j-labs/agent-memory`](https://github.com/neo4j-labs/agent-memory) | Built |
+| X | Prime Intellect | [`PrimeIntellect-ai`](https://github.com/PrimeIntellect-ai) | Built, unnumbered |
+
+### Labs
+
+| # | Topic | Focus | Status |
+|---|---|---|---|
+| 1 | Cloud Compute | Provider orchestration & provisioning | Proposed |
+| 2 | Agent Harness Engineering | Bounded execution, deterministic control planes, and evals | Built |
 
 Lecture 1 is the only lesson that teaches general background — transformer architecture,
 the three training stages, and the interpretability mindset. Every later lesson assumes it
@@ -34,8 +44,8 @@ and never re-derives it.
 
 ## Layout
 
-Lesson directories are named `lecture-<n>-<tool>`. That prefix is load-bearing: a bare
-`trl/` or `repeng/` would collide with a cloned reference repo of the same name, and a
+Lesson directories are named `lecture-<n>-<tool>` or `lab-<n>-<topic>`. That prefix is load-bearing:
+a bare `trl/` or `repeng/` would collide with a cloned reference repo of the same name, and a
 `.gitignore` rule written for one would silently swallow the other.
 
 ```
@@ -49,6 +59,15 @@ Lesson directories are named `lecture-<n>-<tool>`. That prefix is load-bearing: 
 │   ├── build.js
 │   ├── quiz.py
 │   └── logitloom_assignment.md
+├── lecture-3-repeng/
+│   ├── Repeng_Lecture.pptx
+│   ├── build.js
+│   ├── quiz.py
+│   ├── repeng_assignment.md
+│   ├── repeng_kaggle.ipynb
+│   ├── make_notebook.py
+│   ├── make_icons.js               # writes to lecture-3-repeng/icons/, not the shared set
+│   └── offline-wheels/             # repeng 0.5.0 + gguf, because PyPI's release is broken
 ├── lecture-4-trl/
 │   ├── TRL_Lecture.pptx
 │   ├── build.js
@@ -65,6 +84,22 @@ Lesson directories are named `lecture-<n>-<tool>`. That prefix is load-bearing: 
 │   ├── quiz_checks.py
 │   ├── agent_memory_assignment.md
 │   └── assignment_support/         # starter, instructor reference, UI, and checks
+├── lab-2-agent-harnesses/
+│   ├── Agent_Harness_Engineering.pptx
+│   ├── build_deck.mjs
+│   ├── quiz.py
+│   ├── README.md
+│   ├── datasets/
+│   │   └── cafe_metrics.csv
+│   └── part-a-visualization-harness/
+│       ├── starter/harness.py
+│       ├── instructor/harness.py
+│       ├── replay_cases.json
+│       ├── requirements.txt
+│       ├── run_tests.py
+│       ├── setup_check.py
+│       ├── tests/test_harness.py
+│       └── visualization_harness_assignment.md
 ├── icons/                          # shared PNG icon set (see note below)
 ├── vendor/                         # cloned reference repos — gitignored
 └── README.md
@@ -78,11 +113,18 @@ not course material.
 a whole, which keeps upstream source available for reading without a root-level pattern that
 could shadow a lesson folder.
 
-**Commit `icons/`.** The build scripts read PNGs from an icon directory at an absolute path.
-If that directory isn't in the repo, a deck cannot be rebuilt without regenerating the entire
-icon set first — which has already cost one session the ability to rebuild in place. They're
-small. Keep them. `gen-icons.js` reproduces them deterministically if they're ever lost, and
-verifies rendered pixel colour rather than trusting filenames.
+**Commit `icons/`.** If the icon set isn't in the repo, a deck cannot be rebuilt without
+regenerating it first — which has already cost one session the ability to rebuild in place.
+They're small. Keep them. `lecture-4-trl/gen-icons.js` reproduces them deterministically if
+they're ever lost, and verifies rendered pixel colour rather than trusting filenames.
+
+**Paths are resolved relative to the script, never absolute.** `build.js` and its helpers
+resolve icons and output from `__dirname` / `__file__`, with optional `REPO_TEACHER_ICONS` and
+`REPO_TEACHER_OUT` environment overrides. Decks get rebuilt from more than one machine and
+inside sandboxes with different home directories; a hardcoded `/home/…` path silently breaks
+every one of them. Lecture 3 is the exception to the *shared* icon set — its `make_icons.js`
+writes into `lecture-3-repeng/icons/`, which is not currently committed, so that deck needs
+`node make_icons.js` before `node build.js`.
 
 ---
 
@@ -104,11 +146,15 @@ Courier New for code citations). Earlier lessons use
 `@oai/artifact-tool` presentation runtime.
 
 ```bash
-node build.js
-python3 rezip.py Deck.pptx                    # normalize compression
+node build.js                                        # writes Deck.pptx beside the script
+python3 <pptx-skill>/scripts/office/validate.py Deck.pptx
 soffice --headless --convert-to pdf Deck.pptx
 pdftoppm -jpeg -r 150 Deck.pdf slide
 ```
+
+`<pptx-skill>` is wherever the `pptx` skill is mounted in the session you're working in —
+it has moved between `/mnt/skills/public/pptx` and `~/.claude/skills/pptx`. Locate it rather
+than pasting a path from an old note.
 
 **Then look at every rendered slide.** The visual QA pass is not optional — several defects in
 this project were invisible to text extraction and only surfaced in the images.
