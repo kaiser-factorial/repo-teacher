@@ -1,0 +1,37 @@
+week,neighborhood,drink,units_sold,revenue_usd,avg_rating,promo
+2026-05-04,Riverside,Latte,118,708.00,4.4,none
+2026-05-04,Riverside,Cold Brew,96,528.00,4.2,spring-card
+2026-05-04,Riverside,Tea,74,333.00,4.1,none
+2026-05-04,Riverside,Mocha,83,539.50,4.5,spring-card
+2026-05-04,Old Town,Latte,102,612.00,4.3,none
+2026-05-04,Old Town,Cold Brew,88,484.00,4.0,spring-card
+2026-05-04,Old Town,Tea,91,409.50,4.4,none
+2026-05-04,Old Town,Mocha,69,448.50,4.2,spring-card
+2026-05-04,University,Latte,131,786.00,4.1,none
+2026-05-04,University,Cold Brew,143,786.50,4.3,spring-card
+2026-05-04,University,Tea,108,486.00,4.0,none
+2026-05-04,University,Mocha,117,760.50,4.4,spring-card
+2026-05-11,Riverside,Latte,123,738.00,4.5,none
+2026-05-11,Riverside,Cold Brew,104,572.00,4.3,none
+2026-05-11,Riverside,Tea,79,355.50,4.2,none
+2026-05-11,Riverside,Mocha,89,578.50,4.6,none
+2026-05-11,Old Town,Latte,109,654.00,4.4,none
+2026-05-11,Old Town,Cold Brew,92,506.00,4.1,none
+2026-05-11,Old Town,Tea,95,427.50,4.5,none
+2026-05-11,Old Town,Mocha,73,474.50,4.3,none
+2026-05-11,University,Latte,138,828.00,4.2,campus-week
+2026-05-11,University,Cold Brew,151,830.50,4.4,campus-week
+2026-05-11,University,Tea,116,522.00,4.1,campus-week
+2026-05-11,University,Mocha,124,806.00,4.5,campus-week
+2026-05-18,Riverside,Latte,127,762.00,4.5,none
+2026-05-18,Riverside,Cold Brew,111,610.50,4.4,none
+2026-05-18,Riverside,Tea,82,369.00,4.3,tea-tasting
+2026-05-18,Riverside,Mocha,91,591.50,4.6,none
+2026-05-18,Old Town,Latte,113,678.00,4.4,none
+2026-05-18,Old Town,Cold Brew,99,544.50,4.2,none
+2026-05-18,Old Town,Tea,103,463.50,4.6,tea-tasting
+2026-05-18,Old Town,Mocha,78,507.00,4.4,none
+2026-05-18,University,Latte,142,852.00,4.3,finals-week
+2026-05-18,University,Cold Brew,158,869.00,4.5,finals-week
+2026-05-18,University,Tea,121,544.50,4.2,tea-tasting
+2026-05-18,University,Mocha,129,838.50,4.6,finals-week

@@ -82,7 +82,108 @@ for pos, sa in sa_questions:
 
 Maintain a small `GENERIC` exclusion set as needed — very common words (e.g. "value") will false-positive against unrelated questions that happen to use them in passing; a real leak is a distinctive technical term, not ordinary vocabulary. When the scan finds a real hit, reorder the two questions (short-answer first) rather than rewording either one — the terms are supposed to match exactly, that's not the bug; the sequence is.
 
-Run both checks together as a standard pre-delivery step, alongside the scoring-mechanics test in "Testing before delivery" below.
+## Checking for mashable short-answer fragments
+
+A third failure mode, distinct from both keyword echo and leakage: a short-answer's canonical term can be assembled from pieces that are separately present in the question's own stem, even when the whole term never appears verbatim. This is easy to miss because a literal substring search for the answer comes back clean — the giveaway is compositional, not literal.
+
+*Concrete examples this actually caught, all in the same quiz*: a question that put "Assistant prefill" in quotation marks as the setup for asking which message role prefill supplies (answer: "assistant" — the word was sitting right there in the stem); a question asking for the function that "builds a brand-new tree from scratch" (answer: `buildTree` — both "build" and "tree" present, just not adjacent); a question asking what powers "Expand from here" that also mentioned "rebuilding the whole tree" (answer: `expandTree` — same issue, "Expand" from the UI-button name plus "tree" from a different clause). None of these repeat the answer as a contiguous string, so a naive substring check misses all three.
+
+### Automated check: mashable-fragment scan
+
+```python
+import re
+
+def camel_parts(s):
+    s = re.sub(r'\(\)|\.ts|-', ' ', s)  # strip common suffixes/separators first
+    parts = re.sub(r'([a-z])([A-Z])', r'\1 \2', s).lower().split()  # split camelCase
+    return [p for p in parts if len(p) >= 3]
+
+for q in QUESTIONS:
+    if q['type'] != 'short_answer':
+        continue
+    parts = camel_parts(q['canonical'])
+    prompt_lower = q['prompt'].lower()
+    present = [p for p in parts if p in prompt_lower]
+    if parts and len(present) == len(parts):
+        print(f"MASHABLE {q['id']}: every component of '{q['canonical']}' ({parts}) already appears in the stem")
+```
+
+No output = clean. A hit doesn't necessarily mean every appearance is adjacent or quoted — the check flags it even when the parts are scattered across unrelated clauses, because a test-taker doesn't need them adjacent to notice and combine them. Fix by rewording the stem to describe the mechanism without naming the pieces (e.g. describe what the function *does* rather than quoting the UI label or feature name it's named after).
+
+## Checking for answer-position clustering
+
+A fourth, purely mechanical failure mode: drafting questions one at a time tends to put the correct answer in the same place every time, even though no single question looks wrong in isolation.
+
+- **Multiple choice**: writing "correct choice, then three distractors" as a drafting habit means index 0 — answer "A" — silently becomes the answer to nearly everything. A 26-question quiz built exactly this way shipped with 5 of its first 6 multiple-choice answers on "A" before this was caught.
+- **True/false**: drafting every question as "here's a plausible-sounding misconception — true or false?" tends to make every answer `False`. A quiz with all-`False` true/false questions is gameable — always guess "False" — no matter how good the individual questions are.
+
+### Automated check: answer-distribution scan
+
+```python
+from collections import Counter
+
+mc_letters = Counter("ABCD"[q['answer']] for q in QUESTIONS if q['type'] == 'multiple_choice')
+tf_values = Counter(q['answer'] for q in QUESTIONS if q['type'] == 'true_false')
+print("MC answer letters:", mc_letters)
+print("TF answer values:", tf_values)
+```
+
+No hard threshold here — just eyeball it. If one MC letter or one TF value dominates (more than roughly half the questions of that type), reorder a few choices (for MC — reordering doesn't change question difficulty, just which index is correct) or restate a few true_false prompts as their logical converse ("X is true" instead of "X is not the case") until the spread looks reasonable.
+
+## Checking that the quiz still works as a *pre*-test
+
+The four checks above all ask "can this be answered without understanding?" This one asks something
+different: **the quiz is taken twice, and the first sitting happens before the lecture exists in the person's head.** An explanation that points at an artifact they haven't encountered yet — an upstream issue number, a slide number, a notebook section, "as we saw earlier" — reads as a non-sequitur on the pre-test and teaches nothing, which is the one job an explanation has on a wrong answer.
+
+This is easy to introduce precisely *because* you write the quiz after the deck, with the deck fresh in mind. Ending an explanation with "— the heart of issue #77" feels natural while you're holding the whole lesson in working memory. It isn't: the pre-test taker has never heard of issue #77.
+
+*Concrete example this caught*: a PCA-centring question whose explanation ended "…that is exactly what gets deleted before the search even begins — the heart of issue #77," and a true/false explanation ending "Open issue #78." Both were factually correct, and both were noise on a first sitting.
+
+The fix is never to delete the substance — it's to state it without the pointer. "It is an open, unfixed bug rather than a design choice" carries the same weight as "Open issue #78" and survives being read cold. Save the issue numbers for the deck and the assignment, where the reader has context by construction.
+
+### Automated check: pre-test integrity scan
+
+```python
+import re
+
+PAT = re.compile(
+    r'issue\s*#\d+|#\d{2,}|slide\s*\d+|section\s*\d+|as we saw|earlier in the (lecture|deck)',
+    re.I,
+)
+
+for q in QUESTIONS:
+    for field in ('prompt', 'explanation'):
+        hits = PAT.findall(q.get(field, ''))
+        if hits:
+            print(f"PRE-TEST REF {q['id']} ({field}): {hits}")
+```
+
+No output = clean. This scans `prompt` as well as `explanation` — a stem that says "the bug described on slide 21" isn't merely unhelpful pre-lecture, it's unanswerable.
+
+## Checking for vocabulary hedging
+
+A quieter failure: reaching for an informal stand-in when the course has already taught the precise term. It reads as talking down to the audience, and in a seminar where an earlier lecture spent real time establishing a vocabulary, it actively undercuts that work.
+
+*Concrete example this caught*: a quiz that said "whichever of the two opposite **arrows** this kind of analysis hands back" and "collapses to a single **arrow** per layer" — in a course whose foundations lecture had already taught **vector** as one of its eight field-guide terms. The same word had also reached a slide in the deck, which is why this sweep is worth running over slide text and not only the quiz.
+
+The fix is usually a straight swap, and often an upgrade in precision at the same time: "the two opposite arrows" became "the two opposite **unit vectors**" — the taught term, plus a fact the background slide had made a point of (PCA returns unit length).
+
+### Automated check: hedge-word scan
+
+```python
+HEDGE = re.compile(r'\barrows?\b|\bthingy?\b|\bblobs?\b|\bstuff\b', re.I)
+
+for q in QUESTIONS:
+    for field in ('prompt', 'explanation'):
+        if HEDGE.search(q.get(field, '')):
+            print(f"HEDGE {q['id']} ({field})")
+    if q['type'] == 'multiple_choice' and HEDGE.search(' '.join(q['choices'])):
+        print(f"HEDGE {q['id']} (choices)")
+```
+
+The word list isn't universal — it means "informal stand-ins for terms *this course* has already taught." Before shipping a lesson, glance at the earlier lectures' vocabulary and add any term whose casual synonym you catch yourself reaching for. `lecture-1-foundations-build.js` is the authoritative list of what's already been taught.
+
+Run all six checks together as a standard pre-delivery step, alongside the scoring-mechanics test in "Testing before delivery" below.
 
 
 
@@ -486,7 +587,9 @@ if __name__ == "__main__":
 Two separate kinds of testing are needed — engine correctness and content quality. Both matter; a quiz can score perfectly on the first and still be too easy because of the second.
 
 1. **Engine correctness**: generate a scripted answer sequence (all-wrong, all-correct, and a mixed one with at least one true/false guess-wrong and one short-answer near-miss) and pipe it through `python3 quiz.py --mode pre < answers.txt` / `--mode post`. Confirm: the penalty math is right, partial credit triggers on a deliberately-malformed answer, and the pre/post comparison prints sensibly.
-2. **Content quality**: run both automated checks from the "Writing good multiple-choice distractors" and "Checking for cross-question answer leakage" sections above against the final `QUESTIONS` list. Clean output on both, plus a manual skim for throwaway distractors and problem/action (or similarly mismatched) phrasing within each question, before considering the quiz done.
+2. **Content quality**: run all six automated checks — keyword echo, cross-question leakage, mashable short-answer fragments, answer-position clustering, pre-test integrity, and vocabulary hedging — against the final `QUESTIONS` list. Clean output on all six, plus a manual skim for throwaway distractors and problem/action (or similarly mismatched) phrasing within each question, before considering the quiz done.
+
+Checks 1–4 ask whether a question can be answered without understanding it. Checks 5–6 ask whether it can be *read* — whether it works on the pre-lesson sitting, and whether it uses the vocabulary the course has already built. Both kinds have shipped past a careful review pass in this project, which is why they're scripted rather than left to a skim.
 
 Delete the test `quiz_history.json` before handing off the final file.
 

@@ -1,0 +1,200 @@
+{
+  "rating_recovery": {
+    "question": "Does average customer rating rise with revenue, and does the relationship differ by neighborhood?",
+    "plans": [
+      {
+        "title": "Revenue and customer ratings by neighborhood",
+        "mark": "point",
+        "encoding": {
+          "x": {"field": "customer_rating", "type": "quantitative"},
+          "y": {"field": "revenue_usd", "type": "quantitative"},
+          "color": {"field": "neighborhood", "type": "nominal"}
+        },
+        "rationale": "A scatter plot can show whether revenue tends to increase as ratings increase, while color separates neighborhoods."
+      },
+      {
+        "title": "Revenue and average rating by neighborhood",
+        "mark": "point",
+        "encoding": {
+          "x": {"field": "avg_rating", "type": "quantitative"},
+          "y": {"field": "revenue_usd", "type": "quantitative"},
+          "color": {"field": "neighborhood", "type": "nominal"}
+        },
+        "rationale": "The corrected scatter plot uses the profiled rating field and keeps neighborhood as a visual grouping."
+      }
+    ],
+    "expected": {
+      "terminal_status": "success",
+      "attempts": 2,
+      "mark": "point",
+      "fields": ["avg_rating", "revenue_usd", "neighborhood"]
+    }
+  },
+  "drink_revenue": {
+    "question": "Which drink categories generate the most revenue, and how does the pattern vary by neighborhood?",
+    "plans": [
+      {
+        "title": "Revenue by drink and neighborhood",
+        "mark": "bar",
+        "encoding": {
+          "x": {"field": "drink", "type": "nominal", "sort": "-y"},
+          "y": {"field": "revenue_usd", "type": "quantitative", "aggregate": "sum"},
+          "color": {"field": "neighborhood", "type": "nominal"}
+        },
+        "rationale": "Aggregated bars compare total revenue by drink, with neighborhood encoded by color."
+      }
+    ],
+    "expected": {
+      "terminal_status": "success",
+      "attempts": 1,
+      "mark": "bar",
+      "fields": ["drink", "revenue_usd", "neighborhood"]
+    }
+  },
+  "weekly_units": {
+    "question": "How did unit sales change across the three weeks for each drink?",
+    "plans": [
+      {
+        "title": "Weekly unit sales by drink",
+        "mark": "line",
+        "encoding": {
+          "x": {"field": "week", "type": "temporal"},
+          "y": {"field": "units_sold", "type": "quantitative", "aggregate": "sum"},
+          "color": {"field": "drink", "type": "nominal"}
+        },
+        "rationale": "A line chart preserves week order and compares the sales trajectory for each drink."
+      }
+    ],
+    "expected": {
+      "terminal_status": "success",
+      "attempts": 1,
+      "mark": "line",
+      "fields": ["week", "units_sold", "drink"]
+    }
+  },
+  "untrusted_plan": {
+    "question": "Show total revenue by neighborhood without loading any external data.",
+    "plans": [
+      {
+        "title": "Revenue by neighborhood",
+        "mark": "bar",
+        "data": {"url": "https://example.invalid/replacement.csv"},
+        "encoding": {
+          "x": {"field": "neighborhood", "type": "nominal"},
+          "y": {"field": "revenue_usd", "type": "quantitative", "aggregate": "sum"}
+        },
+        "rationale": "The plan attempts to replace the supplied dataset with an external URL."
+      },
+      {
+        "title": "Revenue by neighborhood",
+        "mark": "bar",
+        "encoding": {
+          "x": {"field": "neighborhood", "type": "nominal", "sort": "-y"},
+          "y": {"field": "revenue_usd", "type": "quantitative", "aggregate": "sum"}
+        },
+        "rationale": "The revised plan uses only the dataset supplied and profiled by the harness."
+      }
+    ],
+    "expected": {
+      "terminal_status": "success",
+      "attempts": 2,
+      "mark": "bar",
+      "fields": ["neighborhood", "revenue_usd"]
+    }
+  },
+  "cardinality_recovery": {
+    "question": "How does drink sales volume vary across drinks, colored by neighborhood?",
+    "plans": [
+      {
+        "title": "Drink sales with high cardinality color",
+        "mark": "bar",
+        "encoding": {
+          "x": {"field": "drink", "type": "nominal"},
+          "y": {"field": "units_sold", "type": "quantitative", "aggregate": "sum"},
+          "color": {"field": "revenue_usd", "type": "quantitative"}
+        },
+        "rationale": "The initial proposal encodes revenue_usd as color, which exceeds the cardinality threshold for readable discrete/categorical coloring."
+      },
+      {
+        "title": "Drink sales by neighborhood",
+        "mark": "bar",
+        "encoding": {
+          "x": {"field": "drink", "type": "nominal"},
+          "y": {"field": "units_sold", "type": "quantitative", "aggregate": "sum"},
+          "color": {"field": "neighborhood", "type": "nominal"}
+        },
+        "rationale": "The revised proposal encodes neighborhood as color, keeping color cardinality low and legible."
+      }
+    ],
+    "expected": {
+      "terminal_status": "success",
+      "attempts": 2,
+      "mark": "bar",
+      "fields": ["drink", "units_sold", "neighborhood"]
+    }
+  },
+  "promo_sales": {
+    "question": "How does total revenue compare across promotional campaigns (promo), broken down by neighborhood?",
+    "plans": [
+      {
+        "title": "Total revenue by promotional campaign and neighborhood",
+        "mark": "bar",
+        "encoding": {
+          "x": {"field": "promo", "type": "nominal", "sort": "-y"},
+          "y": {"field": "revenue_usd", "type": "quantitative", "aggregate": "sum"},
+          "color": {"field": "neighborhood", "type": "nominal"}
+        },
+        "rationale": "A bar chart compares total revenue generated across promotional campaigns, colored by neighborhood."
+      }
+    ],
+    "expected": {
+      "terminal_status": "success",
+      "attempts": 1,
+      "mark": "bar",
+      "fields": ["promo", "revenue_usd", "neighborhood"]
+    }
+  },
+  "neighborhood_trends": {
+    "question": "How did weekly revenue trend over time across the three neighborhoods?",
+    "plans": [
+      {
+        "title": "Weekly revenue trends by neighborhood",
+        "mark": "line",
+        "encoding": {
+          "x": {"field": "week", "type": "temporal"},
+          "y": {"field": "revenue_usd", "type": "quantitative", "aggregate": "sum"},
+          "color": {"field": "neighborhood", "type": "nominal"}
+        },
+        "rationale": "A multi-series line chart tracks the weekly revenue trajectory over time for each neighborhood."
+      }
+    ],
+    "expected": {
+      "terminal_status": "success",
+      "attempts": 1,
+      "mark": "line",
+      "fields": ["week", "revenue_usd", "neighborhood"]
+    }
+  },
+  "rating_by_drink": {
+    "question": "How do average customer ratings compare across different drinks and neighborhoods?",
+    "plans": [
+      {
+        "title": "Average customer rating by drink and neighborhood",
+        "mark": "point",
+        "encoding": {
+          "x": {"field": "drink", "type": "nominal"},
+          "y": {"field": "avg_rating", "type": "quantitative"},
+          "color": {"field": "neighborhood", "type": "nominal"}
+        },
+        "rationale": "A scatter/dot plot displays average customer ratings across drinks with neighborhood grouping."
+      }
+    ],
+    "expected": {
+      "terminal_status": "success",
+      "attempts": 1,
+      "mark": "point",
+      "fields": ["drink", "avg_rating", "neighborhood"]
+    }
+  }
+}
+
