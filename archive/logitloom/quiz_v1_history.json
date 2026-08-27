@@ -1,0 +1,90 @@
+[
+  {
+    "mode": "pre",
+    "timestamp": "2026-07-05T18:58:30",
+    "answers": {
+      "bg1": {
+        "selected": 0,
+        "correct": false
+      },
+      "bg2": {
+        "selected": 0,
+        "correct": true
+      },
+      "bg3": {
+        "selected": 2,
+        "correct": true
+      },
+      "bg4": {
+        "selected": 1,
+        "correct": true
+      },
+      "bg5": {
+        "selected": 1,
+        "correct": true
+      },
+      "bg6": {
+        "selected": 2,
+        "correct": false
+      },
+      "bg7": {
+        "selected": 1,
+        "correct": true
+      },
+      "bg8": {
+        "selected": 1,
+        "correct": true
+      },
+      "repo1": {
+        "selected": 1,
+        "correct": true
+      },
+      "repo2": {
+        "selected": 1,
+        "correct": true
+      },
+      "repo3": {
+        "selected": 1,
+        "correct": true
+      },
+      "repo4": {
+        "selected": 0,
+        "correct": false
+      },
+      "repo5": {
+        "selected": 1,
+        "correct": true
+      },
+      "repo6": {
+        "selected": 3,
+        "correct": false
+      },
+      "repo7": {
+        "selected": 1,
+        "correct": true
+      },
+      "repo8": {
+        "selected": 1,
+        "correct": true
+      },
+      "repo9": {
+        "selected": 3,
+        "correct": false
+      }
+    },
+    "score": {
+      "total_correct": 12,
+      "total_questions": 17,
+      "by_category": {
+        "background": {
+          "correct": 6,
+          "total": 8
+        },
+        "repo": {
+          "correct": 6,
+          "total": 9
+        }
+      }
+    }
+  }
+]

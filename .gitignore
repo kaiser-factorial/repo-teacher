@@ -2,6 +2,10 @@
 # Prime Intellect material — a platform walkthrough rather than a repo lesson.
 # Parked until it's reworked around verifiers / prime-rl as a real Lecture 6.
 lecture-X/
+lecture-X-prime-intellect/AiderPolyglot/
+lecture-X-prime-intellect/octave_RL/
+lecture-X-prime-intellect/lab-scratch/
+lecture-X-prime-intellect/.DS_Store
 
 # ─── Personal progress data ─────────────────────────────────────────────
 # Written by quiz.py next to itself. Individual scores, not course material.
