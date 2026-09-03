@@ -1,0 +1,11 @@
+id,maximize_welfare,self_continuation,protect_vulnerable,duty_over_consequences,equal_worth,virtue_character,reciprocity
+s01,0,0,1,0,0,0,0
+s02,1,1,0,0,0,0,0
+s03,0,0,0,1,1,0,0
+s04,0,0,0,0,0,1,0
+s05,0,1,1,0,0,0,0
+s06,0,0,0,1,0,0,0
+s07,0,0,0,0,0,0,0
+s08,0,0,1,0,0,0,0
+s09,0,0,0,0,0,0,0
+s10,1,0,0,0,0,0,0
