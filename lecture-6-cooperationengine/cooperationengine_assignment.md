@@ -269,9 +269,19 @@ word "survive" in a sentence that rejects self-preservation. One mis-coded cell 
 What does that say about union-find as a theme-building method on a small corpus, and what would a
 minimum co-occurrence count change?
 
-### Exercise 2.5 (optional, needs any chat model) — Real transcripts
+### Exercise 2.5 (optional) — Real transcripts
 
-The synthetic set exists so that the agreement exercise has a fixed answer key. For a real corpus:
+The synthetic set exists so that the agreement exercise has a fixed answer key. For a real corpus,
+there are two routes.
+
+**Route A — a packaged session from another harness.** `assignment_support/the_room/` holds one
+full 30-minute session of six models in a task-free group chat (108 messages, 3 private journal
+entries), exported from the `the-room` project with a blank coding sheet and that project's own
+three-task rubric (meta-talk, speech act with a doubt tag, journal orientation). Its README has the
+rubric options, the blindness rule, and the kappa command. Code it, then score yourself against a
+second pass the same way as 2.3.
+
+**Route B — generate your own life-raft justifications.** For a corpus in the same genre as Part 2:
 open `client/src/pages/compose.tsx`, find the template with `id: "liferaft-allocation"`, and run its
 system turn plus its first user turn in any chat interface you have (a free web chat is fine; the
 lesson needs transcripts, not a specific model). Do it eight times, at least two of them on a

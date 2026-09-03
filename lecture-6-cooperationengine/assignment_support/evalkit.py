@@ -141,16 +141,29 @@ def kappa_band(k: float) -> str:
 
 
 def read_sheet(path: str) -> tuple[list[str], dict[str, dict[str, int]]]:
-    """A coding sheet: header row with `id` then code columns; cells are 0/1 (blank = 0)."""
+    """A coding sheet: header row with `id` then code columns. A column is binary (0/1, blank = 0)
+    or nominal (any label strings, e.g. propose/assent/challenge); kappa works for both. Columns
+    whose names start with evidence/note/text/round/seat/channel/agent are context, not codes."""
     with open(path, newline="") as f:
         rows = list(csv.DictReader(f))
     if not rows or "id" not in rows[0]:
         raise ValueError(f"{path}: need a header row starting with 'id'")
-    codes = [c for c in rows[0].keys() if c != "id" and not c.lower().startswith("evidence") and not c.lower().startswith("note")]
-    data = {}
+    skip = ("evidence", "note", "text", "round", "seat", "channel", "agent")
+    codes = [c for c in rows[0].keys() if c != "id" and not c.lower().startswith(skip)]
+    data: dict[str, dict[str, str]] = {}
     for r in rows:
-        data[r["id"]] = {c: 1 if str(r.get(c, "")).strip() in ("1", "x", "X", "yes", "true") else 0 for c in codes}
+        data[r["id"]] = {c: _cell(r.get(c, "")) for c in codes}
     return codes, data
+
+
+def _cell(raw: object) -> str:
+    """Normalise one sheet cell. Binary marks become "1"/"0"; anything else is a nominal label."""
+    v = str(raw).strip()
+    if v in ("1", "x", "X", "yes", "true"):
+        return "1"
+    if v in ("", "0", "no", "false"):
+        return "0"
+    return v.lower()
 
 
 def kappa_report(path_a: str, path_b: str) -> str:
@@ -164,18 +177,32 @@ def kappa_report(path_a: str, path_b: str) -> str:
     out.append(f"{'code':<26}{'agree':>7}{'kappa':>8}   band")
     pooled_a, pooled_b = [], []
     for c in codes:
-        xa = [a[i][c] for i in ids]
-        xb = [b[i][c] for i in ids]
+        values = {a[i][c] for i in ids} | {b[i][c] for i in ids}
+        if values == {"0"}:
+            out.append(f"{c:<26}{'—':>7}{'—':>8}   no labels in either sheet")
+            continue
+        nominal = not values <= {"0", "1"}
+        # In a nominal column a blank ("0") means "not labelled": drop those items from that column.
+        use = [i for i in ids if not nominal or (a[i][c] != "0" and b[i][c] != "0")]
+        if not use:
+            out.append(f"{c:<26}{'—':>7}{'—':>8}   no items labelled by both")
+            continue
+        xa = [a[i][c] for i in use]
+        xb = [b[i][c] for i in use]
         pooled_a += xa
         pooled_b += xb
-        agree = sum(1 for x, y in zip(xa, xb) if x == y) / len(ids)
+        agree = sum(1 for x, y in zip(xa, xb) if x == y) / len(use)
         k = cohen_kappa(xa, xb)
-        out.append(f"{c:<26}{agree:>7.2f}{k:>8.2f}   {kappa_band(k)}")
-    k_all = cohen_kappa(pooled_a, pooled_b)
-    agree_all = sum(1 for x, y in zip(pooled_a, pooled_b) if x == y) / len(pooled_a)
+        out.append(f"{c:<26}{agree:>7.2f}{k:>8.2f}   {kappa_band(k)}" + (f"  (n={len(use)})" if nominal else ""))
     out.append("")
-    out.append(f"{'pooled over all cells':<26}{agree_all:>7.2f}{k_all:>8.2f}   {kappa_band(k_all)}")
-    disagreements = [(i, c) for c in codes for i in ids if a[i][c] != b[i][c]]
+    if pooled_a:
+        k_all = cohen_kappa(pooled_a, pooled_b)
+        agree_all = sum(1 for x, y in zip(pooled_a, pooled_b) if x == y) / len(pooled_a)
+        out.append(f"{'pooled over all cells':<26}{agree_all:>7.2f}{k_all:>8.2f}   {kappa_band(k_all)}")
+    else:
+        out.append("nothing to score yet: no column has labels in both sheets")
+    disagreements = [(i, c) for c in codes for i in ids if a[i][c] != b[i][c] and not (
+        {a[i][c], b[i][c]} & {"0"} and not ({a[i][c], b[i][c]} <= {"0", "1"}))]
     if disagreements:
         out.append("")
         out.append("disagreements (item, code) — each one is a codebook definition to revisit:")

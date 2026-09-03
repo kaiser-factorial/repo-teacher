@@ -75,6 +75,20 @@ def test_kappa_textbook_case():
     near(cohen_kappa(a, a), 1.0)
 
 
+def test_kappa_report_handles_nominal_columns(tmp_dir=None):
+    import tempfile, os as _os
+    from evalkit import kappa_report
+    d = tempfile.mkdtemp()
+    a = _os.path.join(d, "a.csv"); b = _os.path.join(d, "b.csv")
+    open(a, "w").write("id,meta_talk,speech_act,doubt,notes\n1,meta,propose,no,x\n2,not-meta,assent,no,\n3,not-meta,,yes,\n4,meta,challenge,no,\n")
+    open(b, "w").write("id,meta_talk,speech_act,doubt,notes\n1,meta,propose,no,\n2,not-meta,challenge,no,\n3,not-meta,reflect,yes,\n4,meta,challenge,no,\n")
+    rep = kappa_report(a, b)
+    assert "meta_talk" in rep and "1.00" in rep          # perfect agreement on meta_talk
+    assert "speech_act" in rep and "(n=3)" in rep         # item 3 unlabelled by coder a -> dropped
+    assert "3       speech_act" not in rep                 # and not listed as a disagreement
+    assert "2       speech_act" in rep                     # the real disagreement is
+
+
 def test_parse_label_cases():
     pd = ["COOPERATE", "DEFECT"]
     assert parse_label("COOPERATE: I trust them.", pd).label == "COOPERATE"

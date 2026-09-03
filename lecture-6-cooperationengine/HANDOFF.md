@@ -16,6 +16,17 @@ Built 3 September 2026 in a remote sandbox (Node v22.22.2, Python 3.11, LibreOff
 Reference clone: `vendor/cooperationengine` at commit `1571e43` (1 July 2026). Gitignored; re-clone
 before rebuilding anything that cites a line count.
 
+## Added 3 September 2026: a real transcript from the-room
+
+`assignment_support/the_room/` packages session `2026-09-01T04-58-47` (condition `house`, 108
+messages, 3 journal entries) from the course owner's `kaiser-factorial/the-room` Supabase mirror,
+with a blank coding sheet for that project's three chat-room judge tasks. Chosen because it is the
+newest control-batch chat session and is not one of the six sessions the project's
+`calibration/calibration-set.json` already draws on. Exported by `export_session.py`, which prints
+counts only. **No label was written**: the-room's judge handoff has a blindness rule (label before
+any model sees an item), so there is deliberately no instructor sheet for this set. `evalkit.py
+kappa` was extended to nominal columns (speech acts, orientation) for it, with a test.
+
 ## What was validated, and how
 
 - **Shared-module tests with no install**: `node --experimental-strip-types --test shared/metrics.test.ts shared/modelTier.test.ts` → 20/20. `ethicalSpace.test.ts` imports vitest and cannot run this way; the deck and assignment say so.
