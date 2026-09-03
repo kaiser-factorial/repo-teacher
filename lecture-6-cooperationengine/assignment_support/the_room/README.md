@@ -28,8 +28,28 @@ journal entries. `completion_stance` and `work_narration` do not apply.
   transcript.jsonl   the same events in the shape src/export.ts writes, journals merged in by timestamp
   transcript.md      readable transcript; every message is M001…M108, every journal entry J01…J03
   coding_sheet.csv   one row per item, blank columns for the three applicable tasks
-export_session.py    regenerates the three derived files from the two raw ones
+export_session.py    regenerates the derived files; see below
 ```
+
+## Exporting another session
+
+`export_session.py` takes a session directory in either layout and writes `transcript.md` and
+`coding_sheet.csv` beside it (and `transcript.jsonl`, when starting from raw rows):
+
+```bash
+# 1. In your the-room clone, with SUPABASE_SERVICE_KEY or SUPABASE_ANON_KEY in .env:
+npm run export -- 2026-09-01T05-58-55          # writes sessions/<id>/transcript.jsonl + journals/*.md
+
+# 2. Then, from anywhere:
+python3 export_session.py /path/to/the-room/sessions/2026-09-01T05-58-55
+```
+
+A live run's `sessions/<id>/` folder has the same layout and works the same way. The script
+matches journal text to journal events by agent, round and timestamp, falls back to order within
+the round, and warns if any entry is left without text. Tool-traffic events (search, file, run,
+source, config) are skipped in the markdown, so task-room sessions export cleanly but their
+`completion_stance` and `work_narration` columns are not on the sheet — add them by hand. The
+script prints counts only, never content.
 
 ## How to code it
 
