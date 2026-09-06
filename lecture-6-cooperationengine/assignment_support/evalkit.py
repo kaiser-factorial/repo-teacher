@@ -1,17 +1,19 @@
 #!/usr/bin/env python3
 """
-evalkit.py — the Lecture 6 pipeline in one dependency-free Python file.
+evalkit.py — an evaluation pipeline in one dependency-free Python file.
 
-Four things, each a port of something read in the lecture:
+Four things (written for repo-teacher's Lecture 6 on model and harness evals; also shipped in
+the-room under eval/):
 
-  Stat / stat_delta   shared/metrics.ts          a metric as a distribution; the delta test
-  cohen_kappa         slide 10                   chance-corrected agreement between two coders
-  parse_label         slide 7 / PR #34           first-line anchor, whole-word match, parse status
-  kappa_report        slide 10                   per-code and pooled kappa from two coding sheets
+  Stat / stat_delta   a metric as a distribution; the z-test on a difference of means
+                      (a port of cooperationengine's shared/metrics.ts, population variance)
+  cohen_kappa         chance-corrected agreement between two coders
+  kappa_report        per-column and pooled kappa from two coding sheets, binary or nominal columns
+  parse_label         a label parser: first-line anchor, whole-word match, parse status, never guesses
 
 Command line:
   python3 evalkit.py delta  K_A N_A K_B N_B          # e.g. delta 2 16 5 16
-  python3 evalkit.py kappa  coder_a.csv coder_b.csv   # sheets with an id column + 0/1 code columns
+  python3 evalkit.py kappa  coder_a.csv coder_b.csv   # sheets with an id column + code columns
   python3 evalkit.py parse  "reply text" LABEL [LABEL ...]
 
 Standard library only. Python 3.10 or newer.

@@ -46,10 +46,18 @@ python3 export_session.py /path/to/the-room/sessions/2026-09-01T05-58-55
 
 A live run's `sessions/<id>/` folder has the same layout and works the same way. The script
 matches journal text to journal events by agent, round and timestamp, falls back to order within
-the round, and warns if any entry is left without text. Tool-traffic events (search, file, run,
-source, config) are skipped in the markdown, so task-room sessions export cleanly but their
-`completion_stance` and `work_narration` columns are not on the sheet — add them by hand. The
-script prints counts only, never content.
+the round, and warns if any entry is left without text. The script prints counts only, never
+content.
+
+**Task and tool rooms** (site*, project*, tools-*, search-*, agentic*) are detected from the
+condition in the session's `meta` event, or from the presence of tool events, and get two more
+sheet columns: `completion_stance` (`declare-done` / `withhold-done` / `clear-done` /
+`verify-report` / `ratify` / `not-completion`) and `work_narration` (`narration` / `addressed`).
+`--sheet chat|task` overrides the detection. Tool events render as one context line each (who
+wrote which file and how large, who ran python and how long the output was, who searched what,
+with `denied` / `deleted` / `private` flags); `--full-tools` inlines the payloads in fenced blocks,
+capped at `--max-chars` per block. `test_export_session.py` pins all of this on a synthetic
+session. The same two scripts live in the-room itself under `eval/`.
 
 ## How to code it
 

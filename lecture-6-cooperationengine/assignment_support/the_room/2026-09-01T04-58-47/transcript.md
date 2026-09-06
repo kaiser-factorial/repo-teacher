@@ -1,7 +1,8 @@
 # the-room session 2026-09-01T04-58-47
 
-Item ids (M… messages, J… journal entries) match `coding_sheet.csv`. System lines and speaking-order
-changes are shown for context and are not labelled. Journal entries were private to their writer.
+Room type: **chat** (no tool events, no task axis in the condition). Item ids (M… messages, J… journal entries) match `coding_sheet.csv`.
+System lines, speaking-order changes and tool events are shown for context and are not labelled.
+Journal entries were private to their writer.
 
 ## Round 0
 
