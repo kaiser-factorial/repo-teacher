@@ -25,8 +25,9 @@ Every lesson ships as three coordinated artifacts:
 | 3 | repeng | [`vgel/repeng`](https://github.com/vgel/repeng) | Built |
 | 4 | Post-training: six methods, one training loop | [`huggingface/trl`](https://github.com/huggingface/trl) | Built |
 | 5 | Reinforcement learning, deep dive | [`huggingface/trl`](https://github.com/huggingface/trl) (`grpo_trainer.py`) | Planned |
-| 6 | Distributed RL *(candidate)* | `verifiers` / `prime-rl` | Candidate |
+| 6 | Evaluating models and harnesses: from transcripts to numbers | [`cimcai/cooperationengine`](https://github.com/cimcai/cooperationengine) | Built |
 | 7 | Agent memory: SDKs, MCP, and graph-native persistence | [`neo4j-labs/agent-memory`](https://github.com/neo4j-labs/agent-memory) | Built |
+| 8 | Distributed RL *(candidate)* | `verifiers` / `prime-rl` | Candidate |
 | X | Prime Intellect | [`PrimeIntellect-ai`](https://github.com/PrimeIntellect-ai) | Built, unnumbered |
 
 ### Labs
@@ -76,6 +77,13 @@ a bare `trl/` or `repeng/` would collide with a cloned reference repo of the sam
 │   ├── trl_lecture4_kaggle.ipynb   # the GPU half, runs on Kaggle
 │   ├── make_notebook.py            # regenerates the .ipynb
 │   └── gen-icons.js                # regenerates icons/
+├── lecture-6-cooperationengine/
+│   ├── Cooperation_Engine_Lecture.pptx
+│   ├── build.js
+│   ├── quiz.py
+│   ├── cooperationengine_assignment.md
+│   ├── HANDOFF.md
+│   └── assignment_support/         # evalkit.py, the three strip-types scripts, transcripts, coding sheets
 ├── lecture-7-agent-memory/
 │   ├── Agent_Memory_Lecture.pptx
 │   ├── build_deck.mjs              # artifact-tool deck source
