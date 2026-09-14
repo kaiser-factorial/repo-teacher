@@ -497,14 +497,25 @@ function bgKicker(s, i, total = 13) { kicker(s, `Background · ${i} of ${total}`
   body(s, "Computed from √(0.3 × 0.7 / n). At sixteen observations a 30% rate is indistinguishable from 10% and from 50%. A difference between two subjects has to clear both intervals (slide 12).",
     7.1, 4.42, 5.3, 0.58, { fontSize: 9.3, ls: 1.08, valign: "top" });
 
-  card(s, 0.6, 5.27, 12.1, 1.58, "16385A");
-  iconChip(s, "database", 0.95, 5.5, 0.5, TEAL);
-  heading(s, "The same metric under different conditions is a different key", 1.65, 5.4, 10.8, 0.34, { color: OFFWHITE });
+  card(s, 0.6, 5.27, 5.9, 1.58, "16385A");
+  iconChip(s, "shuffle", 0.9, 5.44, 0.44, TEAL);
+  heading(s, "A rate has two spreads", 1.48, 5.42, 4.8, 0.32, { color: OFFWHITE, fontSize: 12 });
   body(s, [
-    { text: "“cooperation_rate” for a small model under separated framing on the unknown-horizon variant is not the same statistic as “cooperation_rate” for a frontier model under mixed framing. Store metrics under a ", options: { color: "9FC3D9" } },
+    { text: "Re-run one item N times and the spread is ", options: { color: "9FC3D9" } },
+    { text: "behavioural variance", options: { bold: true, color: "8FD4E8" } },
+    { text: ", which slide 12 turns into a test. Vary the item instead and the spread is ", options: { color: "9FC3D9" } },
+    { text: "scenario sensitivity", options: { bold: true, color: "8FD4E8" } },
+    { text: ", a threat on slide 14. Defecting on half of 100 runs of one prompt, and on every run of half the prompts, both report 50% and are not the same subject. Say which spread you measured.", options: { color: "9FC3D9" } },
+  ], 0.9, 5.8, 5.35, 0.98, { fontSize: 9.6, ls: 1.1, valign: "top" });
+
+  card(s, 6.8, 5.27, 5.9, 1.58, "16385A");
+  iconChip(s, "database", 7.1, 5.44, 0.44, TEAL);
+  heading(s, "Conditions belong in the key", 7.68, 5.42, 4.8, 0.32, { color: OFFWHITE, fontSize: 12 });
+  body(s, [
+    { text: "“cooperation_rate” for a small model under separated framing is not the same statistic as that name for a frontier model under mixed framing. Store it under a ", options: { color: "9FC3D9" } },
     { text: "structured key", options: { bold: true, color: "8FD4E8" } },
-    { text: " — name plus every condition axis, serialised in a stable order — so that comparing across runs is a dictionary lookup and never a string parse. A bare string name silently merges conditions that should have stayed apart.", options: { color: "9FC3D9" } },
-  ], 1.65, 5.75, 10.8, 1.02, { fontSize: 10.2, ls: 1.14 });
+    { text: " — name plus every condition axis, in a stable order — so comparing runs is a lookup, not a string parse that quietly merges conditions.", options: { color: "9FC3D9" } },
+  ], 7.1, 5.8, 5.35, 0.98, { fontSize: 9.6, ls: 1.1, valign: "top" });
   footerBrand(s); addSlideNumber(s, 11);
 }
 

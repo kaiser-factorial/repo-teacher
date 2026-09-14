@@ -38,10 +38,18 @@ repeats and across items you sample as much as the budget allows.
 Slide 3's right-hand card was retrimmed and set to 10 pt when the longer sentence overflowed the navy
 card (the clipped last line was invisible to text extraction — caught in the render, as always).
 
-**Worth adding later, not done here:** a propensity result has two spreads, and the deck names only
-one. Across repeats of one item is behavioural variance; across items is scenario sensitivity
-(slide 14's prompt-sensitivity threat). A subject defecting on half of 100 runs of one prompt and a
-subject defecting on every run of half the prompts both report 50% and are different objects.
+**14 September 2026 — the two spreads, added on slide 11.** The follow-on gap from the correction
+above: a propensity result has two spreads and the deck named only one. Across repeats of one item is
+behavioural variance (slide 12 turns it into a test); across items is scenario sensitivity (slide
+14's prompt-sensitivity threat). A subject defecting on half of 100 runs of one prompt and a subject
+defecting on every run of half the prompts both report 50% and are different objects.
+
+Slide 11's bottom full-width navy band ("The same metric under different conditions is a different
+key") was split into two half-width navy cards — the two spreads on the left, the structured-key
+point on the right, retrimmed to fit. Deliberately *not* a new slide: inserting one costs the whole
+renumbering cascade in CLAUDE.md, and slide 11 ("A Metric Is a Distribution, Not a Number") is the
+topical home for decomposing that distribution anyway. Both card bodies are `valign: "top"` so
+overflow can only grow downward; the right one had expanded up into its heading on the first render.
 
 ## Added 3 September 2026: a real transcript from the-room
 
