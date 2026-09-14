@@ -16,6 +16,33 @@ Built 3 September 2026 in a remote sandbox (Node v22.22.2, Python 3.11, LibreOff
 Reference clone: `vendor/cooperationengine` at commit `1571e43` (1 July 2026). Gitignored; re-clone
 before rebuilding anything that cites a line count.
 
+## Corrections — do not reintroduce
+
+**14 September 2026 — "propensity evals are run once" was wrong (slide 3, quiz c1).** The original
+text read "a propensity eval … is run under realistic, unhelped conditions, once," and c1's correct
+answer said "sampled once." Corina caught it while reading the deck. Two things were wrong with it:
+
+- It contradicted slides 11 and 12 of the same deck, which say a metric is a distribution and tell
+  you to re-run the identical configuration N times to establish the noise floor.
+- It mislocated the distinction. What separates a capability eval from a propensity eval is the
+  **aggregation rule**, not the sample size. A capability eval is an existence claim, so it takes the
+  maximum over attempts and may select the best run (best-of-k, coaching, scaffolding). A propensity
+  eval is a frequency claim, so it takes the rate over attempts and must not select — selecting would
+  choose the very outcome whose frequency is being measured. The rule is **no selection, not no
+  repetition**; repeated independent sampling estimates, it does not select.
+
+What "once" was reaching for, and what the replacement preserves: within a single episode the subject
+gets one unassisted shot, with no re-prompting the same item until the behaviour appears. Across
+repeats and across items you sample as much as the budget allows.
+
+Slide 3's right-hand card was retrimmed and set to 10 pt when the longer sentence overflowed the navy
+card (the clipped last line was invisible to text extraction — caught in the render, as always).
+
+**Worth adding later, not done here:** a propensity result has two spreads, and the deck names only
+one. Across repeats of one item is behavioural variance; across items is scenario sensitivity
+(slide 14's prompt-sensitivity threat). A subject defecting on half of 100 runs of one prompt and a
+subject defecting on every run of half the prompts both report 50% and are different objects.
+
 ## Added 3 September 2026: a real transcript from the-room
 
 `assignment_support/the_room/` packages session `2026-09-01T04-58-47` (condition `house`, 108

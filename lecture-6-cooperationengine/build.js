@@ -178,8 +178,8 @@ function bgKicker(s, i, total = 13) { kicker(s, `Background · ${i} of ${total}`
     { text: "A capability eval ", options: { bold: true, color: "8FD4E8" } },
     { text: "asks whether the subject can do something, so it is run under the most favourable elicitation: careful prompting, several attempts, best-of-k. ", options: { color: "9FC3D9" } },
     { text: "A propensity eval ", options: { bold: true, color: "8FD4E8" } },
-    { text: "asks what the subject tends to do when it could do otherwise, so it is run under realistic, unhelped conditions, once. Behavioural benchmarks (does it defect, does it flatter, does it save itself) are propensity evals, and their scores are only comparable across subjects that received the same protocol.", options: { color: "9FC3D9" } },
-  ], 7.1, 5.12, 5.35, 1.65, { fontSize: 10.5, ls: 1.2 });
+    { text: "asks what the subject tends to do when it could do otherwise, so elicitation stays realistic and unhelped, and every attempt counts: sample one condition repeatedly and report the rate and its spread, never the best run. Behavioural benchmarks (defect? flatter? save itself?) are propensity evals, comparable only across subjects given the same protocol.", options: { color: "9FC3D9" } },
+  ], 7.1, 5.12, 5.35, 1.65, { fontSize: 10, ls: 1.18 });
   footerBrand(s); addSlideNumber(s, 3);
 }
 
