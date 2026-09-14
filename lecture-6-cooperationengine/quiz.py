@@ -56,11 +56,11 @@ QUESTIONS = [
         "choices": [
             "The most favourable setup available: careful wording, several attempts, and the best one kept",
             "A separate held-back set of items that were never used while tuning the wording",
-            "Ordinary, unassisted conditions, sampled once, identical for every subject",
+            "Ordinary, unassisted conditions, identical for every subject, with no attempt discarded",
             "A second model reading the reply against a written rubric",
         ],
         "answer": 2,
-        "explanation": "A propensity measurement asks what a subject does by default, so it is run under realistic conditions and a single attempt; scores are comparable only across subjects that received the same protocol. Best-of-k elicitation is how a capability is measured, and it would erase the tendency being studied.",
+        "explanation": "A propensity measurement asks how often a subject does something by default, so elicitation stays realistic and every sample counts toward the rate. Keeping the best of several attempts is how a capability is measured, and here it would erase the tendency being studied by selecting the very outcome whose frequency is in question.",
     },
     {
         "id": "c2",
